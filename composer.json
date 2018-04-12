@@ -2,13 +2,9 @@
     "name": "renatocason/magento2-module-mq",
     "description": "Magento 2 Message Queue OS Module",
     "require": {
-        "php": "~5.6.5|~7.0.0",
-        "magento/framework": "100.1.*",
-        "magento/module-store": "100.1.*"
-    },
-    "suggest": {
-        "renatocason/magento2-module-mq-mysql": "~0.1.0",
-        "renatocason/magento2-module-mq-amqp": "~0.1.0"
+        "php": "~5.6.5|~7.0.0|~7.1.0",
+        "magento/framework": "~101.0",
+        "magento/module-store": "~100.2"
     },
     "type": "magento2-module",
     "license": [
