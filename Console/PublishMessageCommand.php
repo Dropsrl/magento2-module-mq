@@ -81,6 +81,7 @@ class PublishMessageCommand extends Command
         // Publish message
         $this->publisher->publish(
             $queueName,
+            $messageName,
             $message
         );
 

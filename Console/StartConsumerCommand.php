@@ -33,6 +33,8 @@ class StartConsumerCommand extends Command
      * @var \Magento\Framework\App\State
      */
     protected $state;
+    
+    protected $consumer;
 
     /**
      * @param State $state
@@ -44,13 +46,14 @@ class StartConsumerCommand extends Command
         State $state,
         QueueConfig $queueConfig,
         MessageEncoderInterface $messageEncoder,
-        $name = null
+        \Rcason\Mq\Model\Consumer $consumer
     ) {
         $this->state = $state;
         $this->queueConfig = $queueConfig;
         $this->messageEncoder = $messageEncoder;
+        $this->consumer = $consumer;
 
-        parent::__construct($name);
+        parent::__construct(null);
     }
 
     /**
@@ -66,36 +69,38 @@ class StartConsumerCommand extends Command
         }
 
         // Load and verify input arguments
-        $queueName = $input->getArgument(self::ARGUMENT_QUEUE_NAME);
+        $queueNames = explode(',', $input->getArgument(self::ARGUMENT_QUEUE_NAME));
         $interval = $input->getOption(self::OPTION_POLL_INTERVAL);
         $limit = $input->getOption(self::OPTION_MESSAGE_LIMIT);
 
-        // Prepare consumer and broker
-        $broker = $this->queueConfig->getQueueBrokerInstance($queueName);
-        $consumer = $this->queueConfig->getQueueConsumerInstance($queueName);
+        if(empty($input->getArgument(self::ARGUMENT_QUEUE_NAME))) {
+            $queueNames = $this->queueConfig->getQueueNames();
+            if(count($queueNames) == 0) {
+                $output->writeln('No configured queue.');
+                return;
+            }
+        }
+        
+        foreach($queueNames as $queueName) {
+            // Prepare consumer and broker
+            $broker = $this->queueConfig->getQueueBrokerInstance($queueName);
+            
+            // Get next message in queue
+            $messages = $broker->peek();
 
-        do {
-          // Get next message in queue
-          $message = $broker->peek();
-
-          if($message) {
-              // Try to process the message
-              try {
-                  $consumer->process(
-                      $this->messageEncoder->decode($queueName, $message->getContent())
-                  );
-                  $broker->acknowledge($message);
-              } catch(\Exception $ex) {
-                  $broker->reject($message);
-                  $output->writeln('Error processing message: ' . $ex->getMessage());
-              }
-          } else {
-              // No message found, wait before checking again
-              usleep($interval * 1000);
-          }
-
-          $limit--;
-        } while($limit != 0);
+            if(count($messages)) {
+                foreach($messages as $message) {
+                    try {
+                        $result = $this->consumer->process($queueName, $message);
+                        $output->writeln($result);
+                    } catch (Exception $ex) {
+                        $broker->reject($message);
+                        $output->writeln('Error processing message: ' . $ex->getMessage());
+                    }                  
+                } 
+            }
+        }
+        
     }
 
     /**
@@ -108,8 +113,8 @@ class StartConsumerCommand extends Command
 
         $this->addArgument(
             self::ARGUMENT_QUEUE_NAME,
-            InputArgument::REQUIRED,
-            'The queue name.'
+            null,
+            'The queue name. Multiple queues separated by comma.'
         );
         $this->addOption(
             self::OPTION_POLL_INTERVAL,

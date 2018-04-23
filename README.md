@@ -33,7 +33,10 @@ $ bin/magento ce_mq:queues:list
 ```
 6. Run your consumer(s)
 ```bash
-$ bin/magento ce_mq:consumers:start product.updates
+$ bin/magento ce_mq:consumers:start queue1,queue2
+or
+$ bin/magento ce_mq:consumers:start
+to run all queues
 ```
 
 ## Message queue backends
@@ -68,7 +71,7 @@ public function __construct(
 ```
 3. Use it to queue messages
 ```php
-$this->publisher->publish('product.updates', $productId);
+$this->publisher->publish('product.updates', 'Updating Product ' . $productId, $productId);
 ```
 4. Implement your consumer(s)
 ```php

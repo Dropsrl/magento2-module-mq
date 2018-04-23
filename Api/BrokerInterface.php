@@ -25,12 +25,12 @@ interface BrokerInterface
      * 
      * @return void
      */
-    public function acknowledge(MessageEnvelopeInterface $message);
+    public function acknowledge(MessageEnvelopeInterface $message, $result);
     
     /**
      * Reject message
      * 
      * @return void
      */
-    public function reject(MessageEnvelopeInterface $message, $requeue = false);
+    public function reject(MessageEnvelopeInterface $message, $result);
 }

@@ -41,10 +41,13 @@ class Publisher implements \Rcason\Mq\Api\PublisherInterface
     /**
      * {@inheritdoc}
      */
-    public function publish($queueName, $messageContent)
+    public function publish($queueName, $messageName, $messageContent)
     {
         $envelope = $this->messageEnvelopeFactory->create()
             ->setContentType($this->messageEncoder->getContentType())
+            ->setName(
+                $this->messageEncoder->encode($queueName, $messageName)
+            )
             ->setContent(
                 $this->messageEncoder->encode($queueName, $messageContent)
             );
