@@ -80,7 +80,7 @@ class StartConsumerCommand extends Command
                 return;
             }
         }
-        
+
         foreach($queueNames as $queueName) {
             // Prepare consumer and broker
             $broker = $this->queueConfig->getQueueBrokerInstance($queueName);
