@@ -123,7 +123,7 @@ class StartConsumerCommand extends Command
             $broker = $this->queueConfig->getQueueBrokerInstance($queueName);
 
             // Get next message in queue
-            $messages = $broker->peek();
+            $messages = $broker->peek($queueName);
 
             if(count($messages)) {
                 foreach($messages as $message) {
