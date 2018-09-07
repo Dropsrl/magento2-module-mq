@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="renatocason_mq">
-        <job instance="Rcason\Mq\Console\StartConsumerCommand" name="rcason_mq_start_consumer_command" method="execute">
+        <job instance="Rcason\Mq\Console\StartConsumerCommand" name="rcason_mq_start_consumer_command" method="processQueue">
             <schedule>*/5 * * * *</schedule>
         </job>
     </group>

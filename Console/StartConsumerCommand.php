@@ -57,9 +57,46 @@ class StartConsumerCommand extends Command
     }
 
     /**
+     * Custom method to process queue
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function processQueue(){
+        try {
+            // this tosses an error if the areacode is not set.
+            $this->state->getAreaCode();
+        } catch (\Exception $e) {
+            $this->state->setAreaCode('adminhtml');
+        }
+
+        $queueNames = $this->queueConfig->getQueueNames();
+        if(count($queueNames) == 0) {
+            $output->writeln('No configured queue.');
+            return;
+        }
+
+        foreach($queueNames as $queueName) {
+            // Prepare consumer and broker
+            $broker = $this->queueConfig->getQueueBrokerInstance($queueName);
+
+            // Get next message in queue
+            $messages = $broker->peek($queueName);
+
+            if(count($messages)) {
+                foreach($messages as $message) {
+                    try {
+                        $result = $this->consumer->process($queueName, $message);
+                    } catch (Exception $ex) {
+                        $broker->reject($message);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
             // this tosses an error if the areacode is not set.
@@ -86,7 +123,7 @@ class StartConsumerCommand extends Command
             $broker = $this->queueConfig->getQueueBrokerInstance($queueName);
 
             // Get next message in queue
-            $messages = $broker->peek($queueName);
+            $messages = $broker->peek();
 
             if(count($messages)) {
                 foreach($messages as $message) {
@@ -100,7 +137,7 @@ class StartConsumerCommand extends Command
                 }
             }
         }
-        
+
     }
 
     /**
