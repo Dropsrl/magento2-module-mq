@@ -59,7 +59,7 @@ class StartConsumerCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output)
     {
         try {
             // this tosses an error if the areacode is not set.
@@ -84,9 +84,9 @@ class StartConsumerCommand extends Command
         foreach($queueNames as $queueName) {
             // Prepare consumer and broker
             $broker = $this->queueConfig->getQueueBrokerInstance($queueName);
-            
+
             // Get next message in queue
-            $messages = $broker->peek();
+            $messages = $broker->peek($queueName);
 
             if(count($messages)) {
                 foreach($messages as $message) {
@@ -96,8 +96,8 @@ class StartConsumerCommand extends Command
                     } catch (Exception $ex) {
                         $broker->reject($message);
                         $output->writeln('Error processing message: ' . $ex->getMessage());
-                    }                  
-                } 
+                    }
+                }
             }
         }
         

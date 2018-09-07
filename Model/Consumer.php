@@ -40,10 +40,9 @@ class Consumer implements \Rcason\Mq\Api\StartConsumerInterface
             $message = $this->messageEnvelopeFactory->create()
                 ->setBrokerRef($queueMessage->getId())
                 ->setContent($queueMessage->getMessageContent());
-            
+
             $broker = $this->queueConfig->getQueueBrokerInstance($queueName);
             $consumer = $this->queueConfig->getQueueConsumerInstance($queueName);
-            
             try {
                 $result = $consumer->process(
                     $this->messageEncoder->decode($queueName, $message->getContent())

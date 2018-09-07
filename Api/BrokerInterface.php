@@ -18,7 +18,7 @@ interface BrokerInterface
      * 
      * @return \Rcason\Mq\Api\Data\MessageEnvelopeInterface|null
      */
-    public function peek();
+    public function peek($queueName);
     
     /**
      * Mark message as processed

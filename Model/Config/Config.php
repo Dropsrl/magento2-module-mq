@@ -78,7 +78,7 @@ class Config extends \Magento\Framework\Config\Data
     public function getBrokerInstance($name, $queueName = null)
     {
         $config = $this->getItemByProperty('brokers', $name);
-        
+
         return $this->objectManager->create(
             $config['implementationInstance'],
             ['queueName' => $queueName]
