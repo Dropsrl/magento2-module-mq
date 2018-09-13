@@ -70,7 +70,6 @@ class StartConsumerCommand extends Command
 
         $queueNames = $this->queueConfig->getQueueNames();
         if(count($queueNames) == 0) {
-            $output->writeln('No configured queue.');
             return;
         }
 
