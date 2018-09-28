@@ -48,7 +48,7 @@ class Consumer implements \Rcason\Mq\Api\StartConsumerInterface
                     $this->messageEncoder->decode($queueName, $message->getContent())
                 );
                 $broker->acknowledge($message, $result);
-            } catch (Exception $ex) {
+            } catch (\Exception $ex) {
                 $broker->reject($message, $ex->getMessage());
             }
         }
