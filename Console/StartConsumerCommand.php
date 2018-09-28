@@ -83,7 +83,7 @@ class StartConsumerCommand extends Command
             if(count($messages)) {
                 foreach($messages as $message) {
                     try {
-                        $result = $this->consumer->process($queueName, $message);
+                        $result = $this->consumer->process($message->getQueueName(), $message);
                     } catch (Exception $ex) {
                         $broker->reject($message);
                     }
