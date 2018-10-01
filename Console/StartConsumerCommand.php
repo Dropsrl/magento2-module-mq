@@ -84,7 +84,7 @@ class StartConsumerCommand extends Command
                 foreach($messages as $message) {
                     try {
                         $result = $this->consumer->process($message->getQueueName(), $message);
-                    } catch (Exception $ex) {
+                    } catch (\Exception $ex) {
                         $broker->reject($message);
                     }
                 }
@@ -129,7 +129,7 @@ class StartConsumerCommand extends Command
                     try {
                         $result = $this->consumer->process($queueName, $message);
                         $output->writeln($result);
-                    } catch (Exception $ex) {
+                    } catch (\Exception $ex) {
                         $broker->reject($message);
                         $output->writeln('Error processing message: ' . $ex->getMessage());
                     }
