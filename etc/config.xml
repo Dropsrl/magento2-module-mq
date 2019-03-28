@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <jobqueue>
+            <general>
+                <log_enabled>1</log_enabled>
+                <log_email>assistenza@drop.it</log_email>
+                <max_retries>5</max_retries>
+            </general>
+        </jobqueue>
+    </default>
+</config>

@@ -1,0 +1,11 @@
+<!--@subject {{var store.getFrontendName()}} - Job Queue Error @-->
+<!--@vars {
+"var title":"Email title",
+"var message":"Email message"
+} @-->
+{{template config_path="design/email/header_template"}}
+
+<h2>{{var title|raw}}</h2>
+{{var message|raw}}
+
+{{template config_path="design/email/footer_template"}}

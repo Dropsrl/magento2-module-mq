@@ -83,7 +83,7 @@ class StartConsumerCommand extends Command
             if(count($messages)) {
                 foreach($messages as $message) {
                     try {
-                        $result = $this->consumer->process($message->getQueueName(), $message);
+                        $this->consumer->process($message->getQueueName(), $message);
                     } catch (\Exception $ex) {
                         $broker->reject($message);
                     }
@@ -106,6 +106,7 @@ class StartConsumerCommand extends Command
 
         // Load and verify input arguments
         $queueNames = explode(',', $input->getArgument(self::ARGUMENT_QUEUE_NAME));
+
         $interval = $input->getOption(self::OPTION_POLL_INTERVAL);
         $limit = $input->getOption(self::OPTION_MESSAGE_LIMIT);
 
@@ -152,6 +153,7 @@ class StartConsumerCommand extends Command
             null,
             'The queue name. Multiple queues separated by comma.'
         );
+
         $this->addOption(
             self::OPTION_POLL_INTERVAL,
             null,

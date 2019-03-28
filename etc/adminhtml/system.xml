@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="drop" translate="label" sortOrder="10">
+            <label>Drop</label>
+        </tab>
+        <section id="jobqueue" translate="label" type="text" sortOrder="310" showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>Job queue</label>
+            <tab>drop</tab>
+            <resource>Rcason_Mq::configuration</resource>
+
+            <group id="general" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General settings</label>
+
+                <!-- Enable log communication -->
+                <field id="log_enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Log error</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable email log error</comment>
+                </field>
+
+                <!-- Email -->
+                <field id="log_email" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Email</label>
+                    <comment><![CDATA[Es. assistenza@drop.it;customercare@drop.it]]></comment>
+                    <depends>
+                        <field id="log_enabled">1</field>
+                    </depends>
+                </field>
+
+                <!-- Max retries -->
+                <field id="max_retries" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Max retries for failed jobs</label>
+                    <comment><![CDATA[Es. 5]]></comment>
+                    <depends>
+                        <field id="log_enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
